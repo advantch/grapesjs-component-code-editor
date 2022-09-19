@@ -6,13 +6,13 @@ import Split from 'split.js';
 
 export class CodeEditor {
     constructor(editor, opts) {
+        console.log(opts, editor)
         this.editor = editor;
         this.$ = editor.$;
         this.pfx = editor.getConfig('stylePrefix');
         this.opts = opts;
         this.canvas = this.findWithinEditor(`.${this.pfx}cv-canvas`);
-        this.panelViews = opts.appendTo ? this.$(opts.appendTo) :
-            this.findWithinEditor(`.${this.pfx}pn-${opts.panelId}`);
+        this.panelViews = opts.appendTo || 'panel'
         this.isShowing = true;
     }
 
@@ -31,13 +31,15 @@ export class CodeEditor {
 
         return editor.CodeManager.createViewer({
             codeName: type === 'html' ? 'htmlmixed' : 'css',
-            theme: 'hopscotch',
+            theme: 'vscode-dark',
             readOnly: 0,
             autoBeautify: 1,
             autoCloseTags: 1,
             autoCloseBrackets: 1,
             styleActiveLine: 1,
             smartIndent: 1,
+            lineWrapping: true,
+            indentWithTabs: true,
             ...opts.codeViewOptions
         });
     }
@@ -53,11 +55,13 @@ export class CodeEditor {
                 <div class="codepanel-label">${type}</div>
                 <div class="cp-btn-container">
                     ${cleanCssBtn}
-                    <button class="cp-apply-${type} ${pfx}btn-prim">${btnText}</button>
+                    <button class=btn-light btn-xs">${btnText}</button>
                 </div>
             </div>`));
         const codeViewerEl = codeViewer.getElement();
         codeViewerEl.style.height = 'calc(100% - 30px)';
+        codeViewerEl.style.minHeight = '200px';
+
         section.append(codeViewerEl);
         this.codePanel.append(section);
         return section.get(0);
@@ -70,9 +74,9 @@ export class CodeEditor {
         this.codePanel.addClass('code-panel');
 
         this.htmlCodeEditor = this.buildCodeEditor('html');
-        this.cssCodeEditor = this.buildCodeEditor('css');
+        //this.cssCodeEditor = this.buildCodeEditor('css');
 
-        const sections = [this.buildSection('html', this.htmlCodeEditor), this.buildSection('css', this.cssCodeEditor)];
+        const sections = [this.buildSection('html', this.htmlCodeEditor)];
 
         panel && !this.opts.appendTo &&
             panel.set('appendContent', this.codePanel).trigger('change:appendContent');
@@ -82,15 +86,15 @@ export class CodeEditor {
         this.codePanel.find('.cp-apply-html')
             .on('click', this.updateHtml.bind(this));
 
-        this.codePanel.find('.cp-apply-css')
-            .on('click', this.updateCss.bind(this));
+        //this.codePanel.find('.cp-apply-css')
+          //  .on('click', this.updateCss.bind(this));
 
-        this.opts.cleanCssBtn && this.codePanel.find('.cp-delete-css')
-            .on('click', this.deleteSelectedCss.bind(this));
+        //this.opts.cleanCssBtn && this.codePanel.find('.cp-delete-css')
+          //  .on('click', this.deleteSelectedCss.bind(this));
 
         Split(sections, {
             direction: 'vertical',
-            sizes: [50, 50],
+            sizes: [100],
             minSize: 100,
             gutterSize: 1,
             onDragEnd: this.refreshEditors.bind(this),
@@ -107,29 +111,30 @@ export class CodeEditor {
     showCodePanel() {
         this.isShowing = true;
         this.updateEditorContents();
-        this.codePanel.css('display', 'block');
+        //this.codePanel.css('display', 'block');
         // make sure editor is aware of width change after the 300ms effect ends
         setTimeout(this.refreshEditors.bind(this), 320);
 
         if (this.opts.preserveWidth) return;
 
-        this.panelViews.css('width', this.opts.openState.pn);
-        this.canvas.css('width', this.opts.openState.cv);
+        //this.panelViews.css('width', this.opts.openState.pn);
+        //this.canvas.css('width', this.opts.openState.cv);
     }
 
     hideCodePanel() {
-        if (this.codePanel) this.codePanel.css('display', 'none');
+        if (this.codePanel) 
+        //this.codePanel.css('display', 'none');
         this.isShowing = false;
 
         if (this.opts.preserveWidth) return;
 
-        this.panelViews.css('width', this.opts.closedState.pn);
-        this.canvas.css('width', this.opts.closedState.cv);
+        //this.panelViews.css('width', this.opts.closedState.pn);
+        //this.canvas.css('width', this.opts.closedState.cv);
     }
 
     refreshEditors() {
         this.htmlCodeEditor.refresh();
-        this.cssCodeEditor.refresh();
+        //this.cssCodeEditor.refresh();
     }
 
     updateHtml(e) {
@@ -139,23 +144,23 @@ export class CodeEditor {
         if (!htmlCode || htmlCode === this.previousHtmlCode) return;
         this.previousHtmlCode = htmlCode;
 
-        let idStyles = '';
-        this.cssCodeEditor
-            .getContent()
-            .split('}\n')
-            .filter((el) => Boolean(el.trim()))
-            .map((cssObjectRule) => {
-                if (!(/}$/.test(cssObjectRule))) {
+        //let idStyles = '';
+        //this.cssCodeEditor
+          //  .getContent()
+            //.split('}\n')
+            //.filter((el) => Boolean(el.trim()))
+            //.map((cssObjectRule) => {
+             //   if (!(/}$/.test(cssObjectRule))) {
                     //* Have to check closing bracket existence for every rule cause it can be missed after split and add it if it doesnt match
-                    return `${cssObjectRule}}`;
-                }
-            })
-            .forEach(rule => {
-                if (/^#/.test(rule))
-                    idStyles += rule;
-            });
+               //     return `${cssObjectRule}}`;
+               // }
+            //})
+            //.forEach(rule => {
+              //  if (/^#/.test(rule))
+                //    idStyles += rule;
+            //});
 
-        htmlCode += `<style>${idStyles}</style>`;
+        //htmlCode += `<style>${idStyles}</style>`;
 
         if (component.attributes.type === 'wrapper') {
             editor.setComponents(htmlCode);
@@ -208,9 +213,9 @@ export class CodeEditor {
         this.component = this.editor.getSelected();
         if (this.component) {
             this.htmlCodeEditor.setContent(this.getComponentHtml(this.component));
-            this.cssCodeEditor.setContent(this.editor.CodeManager.getCode(this.component, 'css', {
-                cssc: this.editor.Css
-            }));
+            //this.cssCodeEditor.setContent(this.editor.CodeManager.getCode(this.component, 'css', {
+              //  cssc: this.editor.Css
+            //}));
         }
     }
 

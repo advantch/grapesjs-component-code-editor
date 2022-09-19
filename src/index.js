@@ -24,7 +24,7 @@ export default (editor, opts = {}) => {
             //Allow editing of javascript, set allowScripts to true for this to work
             editJs: false,
             //Remove component data eg data-gjs-type="..."
-            clearData: false,
+            clearData: true,
             //Used to remove css from the Selector Manager
             cleanCssBtn: true,
             //Save HTML button text

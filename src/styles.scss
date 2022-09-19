@@ -18,6 +18,7 @@ $prefix: 'gjs-' !default;
     justify-content: space-between;
     padding-left: 0.6rem;
     padding-right: 0.6rem;
+    background-color: #1e1e1e;
 }
 
 .code-panel section .codepanel-label {
@@ -41,7 +42,7 @@ $prefix: 'gjs-' !default;
 .gutter {
     cursor: ns-resize;
     position: relative;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.918);
 }
 
 .gutter:after {
@@ -79,3 +80,4 @@ $prefix: 'gjs-' !default;
 .#{$prefix}cv-canvas {
     transition: width 0.3s ease-in-out;
 }
+
