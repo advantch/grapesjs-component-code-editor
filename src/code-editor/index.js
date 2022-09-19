@@ -53,14 +53,15 @@ export class CodeEditor {
         section.append($(`
             <div class="codepanel-separator">
                 <div class="codepanel-label">${type}</div>
-                <div class="cp-btn-container">
-                    ${cleanCssBtn}
-                    <button class=btn-light btn-xs">${btnText}</button>
+                <div class="cp-btn-container mt-2 p-4">
+                    <button class="cp-apply-html btn-light btn-xs mr-2">${btnText}</button>
+                    <button class="cp-close-html btn-light btn-xs" _="on click trigger click on .fa-file-code-o">Close</button>
                 </div>
             </div>`));
         const codeViewerEl = codeViewer.getElement();
         codeViewerEl.style.height = 'calc(100% - 30px)';
         codeViewerEl.style.minHeight = '200px';
+        codeViewerEl.style.maxHeight = '50vh';
 
         section.append(codeViewerEl);
         this.codePanel.append(section);
@@ -69,7 +70,6 @@ export class CodeEditor {
 
     buildCodePanel() {
         const { $, editor } = this;
-        const panel = this.opts.panelId ? this.findPanel() : 0;
         this.codePanel = $('<div></div>');
         this.codePanel.addClass('code-panel');
 
@@ -77,20 +77,11 @@ export class CodeEditor {
         //this.cssCodeEditor = this.buildCodeEditor('css');
 
         const sections = [this.buildSection('html', this.htmlCodeEditor)];
-
-        panel && !this.opts.appendTo &&
-            panel.set('appendContent', this.codePanel).trigger('change:appendContent');
-        this.opts.appendTo && $(this.opts.appendTo).append(this.codePanel);
+        console.log($(this.opts.appendTo), $)
+        $(this.opts.appendTo).append(this.codePanel);
         this.updateEditorContents();
 
-        this.codePanel.find('.cp-apply-html')
-            .on('click', this.updateHtml.bind(this));
-
-        //this.codePanel.find('.cp-apply-css')
-          //  .on('click', this.updateCss.bind(this));
-
-        //this.opts.cleanCssBtn && this.codePanel.find('.cp-delete-css')
-          //  .on('click', this.deleteSelectedCss.bind(this));
+        this.codePanel.find('.cp-apply-html').on('click', this.updateHtml.bind(this));    
 
         Split(sections, {
             direction: 'vertical',
@@ -111,6 +102,8 @@ export class CodeEditor {
     showCodePanel() {
         this.isShowing = true;
         this.updateEditorContents();
+        document.getElementById('codeEditor').style.height = '50vh'
+        document.getElementById('gjs').style.height = '50vh'
         //this.codePanel.css('display', 'block');
         // make sure editor is aware of width change after the 300ms effect ends
         setTimeout(this.refreshEditors.bind(this), 320);
@@ -122,14 +115,13 @@ export class CodeEditor {
     }
 
     hideCodePanel() {
-        if (this.codePanel) 
-        //this.codePanel.css('display', 'none');
+        console.log("closing")
+        if (this.isShowing) {
+            console.log("close edits")
+        }
+        document.getElementById('codeEditor').style.height = '0px'
+        document.getElementById('gjs').style.height = '100%'
         this.isShowing = false;
-
-        if (this.opts.preserveWidth) return;
-
-        //this.panelViews.css('width', this.opts.closedState.pn);
-        //this.canvas.css('width', this.opts.closedState.cv);
     }
 
     refreshEditors() {
@@ -139,29 +131,11 @@ export class CodeEditor {
 
     updateHtml(e) {
         e?.preventDefault();
+        console.log(e, 'apply')
         const { editor, component } = this;
         let htmlCode = this.htmlCodeEditor.getContent().trim();
         if (!htmlCode || htmlCode === this.previousHtmlCode) return;
         this.previousHtmlCode = htmlCode;
-
-        //let idStyles = '';
-        //this.cssCodeEditor
-          //  .getContent()
-            //.split('}\n')
-            //.filter((el) => Boolean(el.trim()))
-            //.map((cssObjectRule) => {
-             //   if (!(/}$/.test(cssObjectRule))) {
-                    //* Have to check closing bracket existence for every rule cause it can be missed after split and add it if it doesnt match
-               //     return `${cssObjectRule}}`;
-               // }
-            //})
-            //.forEach(rule => {
-              //  if (/^#/.test(rule))
-                //    idStyles += rule;
-            //});
-
-        //htmlCode += `<style>${idStyles}</style>`;
-
         if (component.attributes.type === 'wrapper') {
             editor.setComponents(htmlCode);
         } else {
@@ -213,9 +187,6 @@ export class CodeEditor {
         this.component = this.editor.getSelected();
         if (this.component) {
             this.htmlCodeEditor.setContent(this.getComponentHtml(this.component));
-            //this.cssCodeEditor.setContent(this.editor.CodeManager.getCode(this.component, 'css', {
-              //  cssc: this.editor.Css
-            //}));
         }
     }
 

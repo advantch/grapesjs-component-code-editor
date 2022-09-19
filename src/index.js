@@ -6,7 +6,7 @@ export default (editor, opts = {}) => {
             //Panel to append the code editor
             panelId: 'views-container',
             //Append to element instead of views-container
-            appendTo: '',
+            appendTo: '#codeEditor',
             //State when open
             openState: {
                 cv: '65%',
