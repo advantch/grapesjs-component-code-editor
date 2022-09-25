@@ -4,63 +4,14 @@
 <head>
   <meta charset="utf-8">
   <title>Grapesjs Component Code Editor</title>
-  <style>
-
-    /**
- *	@package    vscode-dark theme
- *	@version    1.0.0
- *	@author		  Inter-Net PRO
- *	@link       https://inter-net.pro
- *	@github     https://github.com/Inter-Net-Pro/Theme-VSCode-Dark
- */
- .cm-s-vscode-dark span.cm-meta {color: #569cd6}
- .cm-s-vscode-dark span.cm-number {color: #b5cea8}
- .cm-s-vscode-dark span.cm-keyword {line-height: 1em; font-weight: bold; color: #569cd6;}
- .cm-s-vscode-dark span.cm-def {color:#9cdcfe}
- .cm-s-vscode-dark span.cm-variable {color: #ddd6a3}
- .cm-s-vscode-dark span.cm-variable-2 {color: #9cdcfe}
- .cm-s-vscode-dark span.cm-variable-3,
- .cm-s-vscode-dark span.cm-type {color: #A9B7C6}
- .cm-s-vscode-dark span.cm-property {color: #9cdcfe}
- .cm-s-vscode-dark span.cm-operator {color: #d4d4d4}
- .cm-s-vscode-dark span.cm-string {color: #ce9178}
- .cm-s-vscode-dark span.cm-string-2 {color: #6A8759}
- .cm-s-vscode-dark span.cm-comment {color: #6A9955}
- .cm-s-vscode-dark span.cm-link {color: #287BDE}
- .cm-s-vscode-dark span.cm-atom {color: #569cd6}
- .cm-s-vscode-dark span.cm-error {color: #BC3F3C}
- .cm-s-vscode-dark span.cm-tag {color: #569cd6}
- .cm-s-vscode-dark span.cm-attribute {color: #9cdcfe}
- .cm-s-vscode-dark span.cm-qualifier {color: #d7ba7d}
- .cm-s-vscode-dark span.cm-bracket {color: #808080}
- 
- .cm-s-vscode-dark.CodeMirror {background: #1e1e1e; color: #e9e9e9;}
- .cm-s-vscode-dark .CodeMirror-cursor {border-left: 1px solid #bebebe;}
- .CodeMirror-activeline-background {background: #3A3A3A;}
- .cm-s-vscode-dark div.CodeMirror-selected {background: #1e496c}
- .cm-s-vscode-dark .CodeMirror-gutters {background: #252526; border-right: 1px solid grey; color: #606366}
- .cm-s-vscode-dark span.cm-builtin {color: #A9B7C6;}
- .cm-s-vscode-dark {font-family: Consolas, 'Courier New', monospace, serif;}
- .cm-s-vscode-dark .CodeMirror-matchingbracket {background-color: #3b514d; color: yellow !important;}
- 
- .CodeMirror-hints.vscode-dark {
-   font-family: Consolas, 'Courier New', monospace;
-   color: #9c9e9e;
-   background-color: #3b3e3f !important;
- }
- 
- .CodeMirror-hints.vscode-dark .CodeMirror-hint-active {
-   background-color: #494d4e !important;
-   color: #9c9e9e !important;
- }
-  </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.0/theme/darcula.min.css" integrity="sha512-kqCOYFDdyQF4JM8RddA6rMBi9oaLdR0aEACdB95Xl1EgaBhaXMIe8T4uxmPitfq4qRmHqo+nBU2d1l+M4zUx1g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.8/theme/dracula.min.css" integrity="sha512-gFMl3u9d0xt3WR8ZeW05MWm3yZ+ZfgsBVXLSOiFz2xeVrZ8Neg0+V1kkRIo9LikyA/T9HuS91kDfc2XWse0K0A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link href="https://unpkg.com/grapesjs/dist/css/grapes.min.css" rel="stylesheet">
   <script src="https://unpkg.com/grapesjs"></script>
   <link href="dist/grapesjs-component-code-editor.min.css" rel="stylesheet">
   <script src="dist/grapesjs-component-code-editor.min.js"></script>
   <script src="https://unpkg.com/grapesjs-parser-postcss"></script>
+  <script src="https://vantycms.b-cdn.net/vendor/grapejs-tailwind.min.js"></script>
+  <script type="module" src="node_modules/@vanillawc/wc-monaco-editor/index.js"></script>
+
   <style>
     body,
     html {
@@ -71,27 +22,55 @@
 </head>
 
 <body>
-  <div id="codeEditor"></div>
+  <div id="codeEditor" style="height:0px; overflow:hidden;">
+    <wc-monaco-editor language="html"></wc-monaco-editor>
+  </div>
+  
   <div id="gjs" style="height:0px; overflow:hidden;">
     <div class="panel">
-      <h1 class="welcome">Welcome to</h1>
-      <div class="big-title">
-        <svg class="logo" viewBox="0 0 100 100">
-          <path
-            d="M40 5l-12.9 7.4 -12.9 7.4c-1.4 0.8-2.7 2.3-3.7 3.9 -0.9 1.6-1.5 3.5-1.5 5.1v14.9 14.9c0 1.7 0.6 3.5 1.5 5.1 0.9 1.6 2.2 3.1 3.7 3.9l12.9 7.4 12.9 7.4c1.4 0.8 3.3 1.2 5.2 1.2 1.9 0 3.8-0.4 5.2-1.2l12.9-7.4 12.9-7.4c1.4-0.8 2.7-2.2 3.7-3.9 0.9-1.6 1.5-3.5 1.5-5.1v-14.9 -12.7c0-4.6-3.8-6-6.8-4.2l-28 16.2" />
-        </svg>
-        <span>GrapesJS</span>
+      <div class="-mx-3 mt-0 mb-2 flex w-full pb-6 md:pb-4 lg:mb-4 lg:pb-6 bg-slate-50">
+        <!-- CEO quote-->
+        <div class="mt-0 mb-6 flex w-full max-w-full flex-none flex-col items-center px-3 md:mb-0 md:w-5/12 md:flex-none">
+      
+          <div class="relative text-slate-600 max-w-[400px]">
+            <img class="relative block h-auto max-w-full align-middle z-10" src="https://around.createx.studio/assets/img/landing/business-consulting/ceo.png" alt="Nicolas Black"/>
+            <div class="absolute bottom-0 left-0 w-full bg-slate-500 h-[85%] rounded-tr-[90px] rounded-br-2xl rounded-tl-2xl rounded-bl-xl"></div>
+          </div>
+          <div class="mt-4 pt-4 text-center md:text-left max-w-[400px]">
+            <h2 class="mt-0 mb-2 text-left text-3xl font-semibold text-neutral-900 xl:text-3xl">Nicolas Black</h2>
+            <p class="mt-0 mb-2 text-left text-xl leading-7 text-neutral-400">CEO Around Group</p>
+            <div class="relative pt-6 text-left max-w-[500px]">
+              <div class="absolute top-0 left-0 ml-1 w-full md:ml-1 md:text-left">
+                <svg class="max-w-full align-middle text-slate-200" width="155" height="111" viewBox="0 0 155 111" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M125.969 38.7937C129.372 30.2345 134.734 21.7781 141.902 13.6311C144.17 11.053 144.48 7.34066 142.623 4.45316C141.18 2.18441 138.808 0.94696 136.23 0.94696C135.508 0.94696 134.786 0.99826 134.064 1.25633C118.905 5.69065 83.4811 21.4171 82.5014 71.8454C82.1407 91.2842 96.3717 107.99 114.883 109.898C125.144 110.93 135.353 107.578 142.933 100.772C150.512 93.914 154.844 84.117 154.844 73.9077C154.844 56.8922 142.778 41.9905 125.969 38.7937Z" class=""></path>
+                  <path d="M32.5904 109.898C42.7999 110.93 53.0092 107.578 60.5888 100.772C68.1686 93.914 72.5 84.117 72.5 73.9077C72.5 56.8922 60.4342 41.9905 43.6248 38.7937C47.0281 30.2345 52.3905 21.7781 59.5578 13.6312C61.8265 11.0531 62.1359 7.34071 60.2794 4.45321C58.8358 2.18446 56.4638 0.947006 53.8857 0.947006C53.1641 0.947006 52.4421 0.998306 51.7202 1.25638C36.5608 5.6907 1.13734 21.4172 0.157654 71.8454V72.5671C0.157654 91.6968 14.2341 107.99 32.5904 109.898Z" class=""></path>
+                </svg>
+              </div>
+              <p class="relative my-0 text-xl leading-7 z-10">
+                The main task of our organization is
+                <strong class="font-bold">to assess the state of your enterprise now and how you can achieve your goals.</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Steps-->
+        <div class="mt-0 w-full max-w-full lg:max-w-[600px] flex-none px-3 sm:w-5/12 sm:flex-none md:w-7/12 md:flex-none lg:w-1/2 lg:flex-none">
+          <div class="pl-0 md:pl-6 lg:pl-0">
+
+  
+    
+       
+          </div>
+        </div>
       </div>
-      <div class="description">
-        This is a demo content from index.html. For the development, you shouldn't edit this file, instead you can
-        copy and rename it to _index.html, on next server start the new file will be served, and it will be ignored by
-        git.
-      </div>
+      
     </div>
   </div>
 
 
   <script type="text/javascript">
+    const escapeName = (name) => `${name}`.trim().replace(/([^a-z0-9\w-:/]+)/gi, '-');
+
     window.editor = grapesjs.init({
       height: '100%',
       container: '#gjs',
@@ -101,10 +80,12 @@
       storageManager: false,
       selectorManager: {
         componentFirst: true,
+
       },
       plugins: [
-        'grapesjs-component-code-editor', 
-        'grapesjs-parser-postcss'
+      'grapesjs-parser-postcss',
+      'grapesjs-tailwind',
+      'grapesjs-component-code-editor', 
       ],
       pluginsOpts: {
         'grapesjs-component-code-editor': {
@@ -131,7 +112,7 @@
       attributes: {
         class: 'gjs-fonts gjs-f-b1'
       },
-      content: `<div style="padding-top:50px; padding-bottom:50px; text-align:center">Test block</div>`
+      content: ``
     });
   </script>
 </body>

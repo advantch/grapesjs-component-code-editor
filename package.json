@@ -1,6 +1,6 @@
 {
   "name": "grapesjs-component-code-editor",
-  "version": "1.0.25",
+  "version": "1.0.43",
   "description": "Grapesjs Component Code Editor",
   "main": "dist/grapesjs-component-code-editor.min.js",
   "repository": {
@@ -20,12 +20,18 @@
     "code-editor"
   ],
   "devDependencies": {
+    "css-loader": "^6.7.1",
     "grapesjs-cli": "^1.0.12",
     "node-sass": "^7.0.0"
   },
   "author": "Brendon Ngirazi",
   "license": "MIT",
   "dependencies": {
+    "@codemirror/fold": "^0.19.4",
+    "@vanillawc/wc-monaco-editor": "^1.10.15",
+    "codemirror": "^5.63.0",
+    "monaco-editor": "^0.34.0",
+    "requirejs": "^2.3.6",
     "split.js": "^1.6.2"
   }
 }

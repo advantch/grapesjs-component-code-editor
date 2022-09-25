@@ -14,6 +14,7 @@ export class CodeEditor {
         this.canvas = this.findWithinEditor(`.${this.pfx}cv-canvas`);
         this.panelViews = opts.appendTo || 'panel'
         this.isShowing = true;
+
     }
 
     findPanel() {
@@ -26,22 +27,30 @@ export class CodeEditor {
         return this.$(selector, this.editor.getEl());
     }
 
-    buildCodeEditor(type) {
-        const { editor, opts } = this;
+    /**
+     * 
+     * @param {*} type 
+     * @returns 
+     * 
+     * Adds monaco editor to the code view
+     */
+    buildCodeEditor() {
 
-        return editor.CodeManager.createViewer({
-            codeName: type === 'html' ? 'htmlmixed' : 'css',
-            theme: 'vscode-dark',
-            readOnly: 0,
-            autoBeautify: 1,
-            autoCloseTags: 1,
-            autoCloseBrackets: 1,
-            styleActiveLine: 1,
-            smartIndent: 1,
-            lineWrapping: true,
-            indentWithTabs: true,
-            ...opts.codeViewOptions
-        });
+        let e = document.querySelector('wc-monaco-editor').editor
+        e.updateOptions({
+            "language": "html",
+            "theme": "vs-dark",
+            "automaticLayout": true,
+            "lineNumbersMinChars": 3,
+            "mouseWheelZoom": true,
+            //"minimap": "",
+            //"wordWrap": "",
+            "wrappingIndent": "",
+            "autoIndent": true,
+            "formatOnPaste": true,
+            "formatOnType": true
+        })
+        return e;
     }
 
     buildSection(type, codeViewer) {
@@ -53,14 +62,14 @@ export class CodeEditor {
         section.append($(`
             <div class="codepanel-separator">
                 <div class="codepanel-label">${type}</div>
-                <div class="cp-btn-container mt-2 p-4">
+                <div class="cp-btn-container mt-2">
                     <button class="cp-apply-html btn-light btn-xs mr-2">${btnText}</button>
-                    <button class="cp-close-html btn-light btn-xs" _="on click trigger click on .fa-file-code-o">Close</button>
                 </div>
             </div>`));
-        const codeViewerEl = codeViewer.getElement();
-        codeViewerEl.style.height = 'calc(100% - 30px)';
-        codeViewerEl.style.minHeight = '200px';
+        const codeViewerEl = codeViewer._domElement
+        codeViewerEl.style.height = 'calc(50vh - 30px)';
+        codeViewerEl.style.transition = 'height 1s';
+        codeViewerEl.style.minHeight = '40vh';
         codeViewerEl.style.maxHeight = '50vh';
 
         section.append(codeViewerEl);
@@ -81,7 +90,7 @@ export class CodeEditor {
         $(this.opts.appendTo).append(this.codePanel);
         this.updateEditorContents();
 
-        this.codePanel.find('.cp-apply-html').on('click', this.updateHtml.bind(this));    
+        this.codePanel.find('.cp-apply-html').on('click', this.updateHtml.bind(this));
 
         Split(sections, {
             direction: 'vertical',
@@ -133,10 +142,11 @@ export class CodeEditor {
         e?.preventDefault();
         console.log(e, 'apply')
         const { editor, component } = this;
-        let htmlCode = this.htmlCodeEditor.getContent().trim();
+        let htmlCode = this.htmlCodeEditor.getModel().getValue();
+        console.log(htmlCode)
         if (!htmlCode || htmlCode === this.previousHtmlCode) return;
         this.previousHtmlCode = htmlCode;
-        if (component.attributes.type === 'wrapper') {
+        if (component && component.attributes.type === 'wrapper') {
             editor.setComponents(htmlCode);
         } else {
             editor.select(component.replaceWith(htmlCode));
@@ -186,7 +196,9 @@ export class CodeEditor {
 
         this.component = this.editor.getSelected();
         if (this.component) {
-            this.htmlCodeEditor.setContent(this.getComponentHtml(this.component));
+            // set value to editor
+            this.htmlCodeEditor.getModel().setValue(this.getComponentHtml(this.component));
+            this.htmlCodeEditor.getAction('editor.action.formatDocument').run()
         }
     }
 
